@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600></canvas>
+      <canvas id="unity-canvas" width=1024 height=576></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -56,11 +56,11 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/build for teleSim.loader.js";
+      var loaderUrl = buildUrl + "/New folder.loader.js";
       var config = {
-        dataUrl: buildUrl + "/build for teleSim.data",
-        frameworkUrl: buildUrl + "/build for teleSim.framework.js",
-        codeUrl: buildUrl + "/build for teleSim.wasm",
+        dataUrl: buildUrl + "/New folder.data",
+        frameworkUrl: buildUrl + "/New folder.framework.js",
+        codeUrl: buildUrl + "/New folder.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "Telescope Simulator Project",
@@ -82,8 +82,8 @@
         config.devicePixelRatio = 1;
         unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
+        canvas.style.width = "1024px";
+        canvas.style.height = "576px";
       }
       loadingBar.style.display = "block";
 

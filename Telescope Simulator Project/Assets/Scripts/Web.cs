@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 
 public class Web : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class Web : MonoBehaviour
     //string internalDomain = "http://localhost/UnityBackendTutorial/";
     string externalDomain = "https://unityxampptutorial.000webhostapp.com/";
     string urlHeader;
+
+    public TextMeshProUGUI telescopeSpecsTxt;
+    public TextMeshProUGUI planetsTxt;
+    public TextMeshProUGUI starsTxt;
 
     void Start()
     {
@@ -23,12 +28,14 @@ public class Web : MonoBehaviour
         //StartCoroutine(Login("testuser", "123456"));
         //StartCoroutine(RegisterUser("testuser3", "123456"));
 
-        StartCoroutine(GetItem());
+        StartCoroutine(GetStars());
+        StartCoroutine(GetPlanets());
+        StartCoroutine(GetTelescopeSpecs());
     }
 
-    public IEnumerator GetItem()
+    public IEnumerator GetStars()
     {
-        string uri = urlHeader + "GetItem.php";
+        string uri = urlHeader + "GetStars.php";
         WWWForm form = new WWWForm();
         //form.AddField("itemID", itemID);
 
@@ -52,7 +59,8 @@ public class Web : MonoBehaviour
                 case UnityWebRequest.Result.Success:
                     // Show results as text
                     //Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
-                    Debug.Log(webRequest.downloadHandler.text);
+                    //Debug.Log(webRequest.downloadHandler.text);
+                    starsTxt.text = webRequest.downloadHandler.text;
                     string jsonArray = webRequest.downloadHandler.text;
                     // Call callback function to pass results
                     //callback(jsonArray);
@@ -60,6 +68,77 @@ public class Web : MonoBehaviour
             }
         }
     }
+    public IEnumerator GetPlanets()
+    {
+        string uri = urlHeader + "GetPlanets.php";
+        WWWForm form = new WWWForm();
+        //form.AddField("itemID", itemID);
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    // Show results as text
+                    //Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                    //Debug.Log(webRequest.downloadHandler.text);
+                    planetsTxt.text = webRequest.downloadHandler.text;
+                    string jsonArray = webRequest.downloadHandler.text;
+                    // Call callback function to pass results
+                    //callback(jsonArray);
+                    break;
+            }
+        }
+    }
+    public IEnumerator GetTelescopeSpecs()
+    {
+        string uri = urlHeader + "GetTelescopeSpecs.php";
+        WWWForm form = new WWWForm();
+        //form.AddField("itemID", itemID);
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError(pages[page] + ": Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError(pages[page] + ": HTTP Error: " + webRequest.error);
+                    break;
+                case UnityWebRequest.Result.Success:
+                    // Show results as text
+                    //Debug.Log(pages[page] + ":\nReceived: " + webRequest.downloadHandler.text);
+                    //Debug.Log(webRequest.downloadHandler.text);
+                    telescopeSpecsTxt.text = webRequest.downloadHandler.text;
+                    string jsonArray = webRequest.downloadHandler.text;
+                    // Call callback function to pass results
+                    //callback(jsonArray);
+                    break;
+            }
+        }
+    }
+
 
     IEnumerator GetDate(string uri)
     {
