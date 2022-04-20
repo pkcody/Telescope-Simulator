@@ -24,6 +24,7 @@ public class Web : MonoBehaviour
 
     public List<string> magnifcations;
     public List<string> apertures;
+
     void Start()
     {
         urlHeader = externalDomain;
@@ -114,6 +115,17 @@ public class Web : MonoBehaviour
 
             GameObject starGO = Instantiate(Resources.Load("StarGO") as GameObject);
             starGO.name = name;
+
+            Color c;
+            if (!color.Contains("#"))
+            {
+                color = "#" + color;
+            }
+            if (ColorUtility.TryParseHtmlString(color, out c))
+            {
+                starGO.GetComponent<MeshRenderer>().material.color = c;
+            }
+            
             starGO.transform.localPosition = new Vector3(star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc);
             starGO.transform.SetParent(GameObject.Find("StarGOs").transform, false);
 
@@ -265,4 +277,5 @@ public class Web : MonoBehaviour
         magDropDown.AddOptions(magnifcations);
         apDropDown.AddOptions(apertures);
     }
+    
 }
