@@ -212,7 +212,8 @@ public class Web : MonoBehaviour
             #endregion
             # region Planet GameObject
 
-            GameObject planetGO = Instantiate(Resources.Load("PlanetGO") as GameObject);
+            GameObject planetGO = Instantiate(Resources.Load(name) as GameObject);
+            planetGO.AddComponent<PlanetGO>();
             planetGO.name = name;
             planetGO.transform.localPosition = new Vector3(planet.declination.degrees, planet.declination.minOfArc, planet.declination.secOfArc);
             planetGO.transform.SetParent(GameObject.Find("PlanetGOs").transform, false);

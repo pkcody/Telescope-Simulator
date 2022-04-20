@@ -17,7 +17,6 @@ public class ColorChanger : MonoBehaviour
 
         if(ColorUtility.TryParseHtmlString(s, out color))
         {
-            print("yay");
             GetComponent<Image>().color = color;
         }
     }

@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 18a2d531e7318db44a39fede898eb109
+  - enabled: 1
     path: Assets/Scenes/Space.unity
     guid: 50e5445e62cecb64390595986189fa4a
+  - enabled: 1
+    path: Assets/Scenes/StarAdder.unity
+    guid: ad7c326294edddb4bbcd141d97c0ad6b
   m_configObjects: {}

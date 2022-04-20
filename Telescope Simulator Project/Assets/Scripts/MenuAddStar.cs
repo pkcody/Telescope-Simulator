@@ -16,8 +16,12 @@ public class MenuAddStar : MonoBehaviour
     public TMP_InputField size_IF;
     public TMP_InputField distanceFrom_IF;
     public TMP_InputField color_IF;
-    public TMP_InputField rightAsc_IF;
-    public TMP_InputField declin_IF;
+    public TMP_InputField rightAscHours_IF;
+    public TMP_InputField rightAscMin_IF;
+    public TMP_InputField rightAscSec_IF;
+    public TMP_InputField declinDeg_IF;
+    public TMP_InputField declinMin_IF;
+    public TMP_InputField declinSec_IF;
     public TMP_InputField constell_IF;
     public TMP_InputField addedBy_IF;
 
@@ -36,12 +40,15 @@ public class MenuAddStar : MonoBehaviour
         string uri = urlHeader + "AddStar.php";
         WWWForm form = new WWWForm();
 
+        string rightAscension = rightAscHours_IF.text +  " " + rightAscMin_IF.text + " " + rightAscSec_IF.text;
+        string declination = declinDeg_IF.text + " " + declinMin_IF.text + " " + declinSec_IF.text;
+
         form.AddField("Name", name_IF.text);
         form.AddField("Size", size_IF.text);
         form.AddField("DistanceFrom", distanceFrom_IF.text);
         form.AddField("Color", color_IF.text);
-        form.AddField("RightAscension", rightAsc_IF.text);
-        form.AddField("Declination", declin_IF.text);
+        form.AddField("RightAscension", rightAscension);
+        form.AddField("Declination", declination);
         form.AddField("Constellation", constell_IF.text);
         form.AddField("AddedBy", addedBy_IF.text);
 
