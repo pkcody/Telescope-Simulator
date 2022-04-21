@@ -8,26 +8,45 @@ using System;
 
 public class Web : MonoBehaviour
 {
+    [Header("Database")]
     public bool UseExternalDB = false;
-    //string internalDomain = "http://localhost/UnityBackendTutorial/";
     string externalDomain = "https://unityxampptutorial.000webhostapp.com/";
     string urlHeader;
 
+    [Header("Stars")]
+    public List<GameObject> stars;
     public List<Star> starPanels;
+
+    [Header("Planets")]
+    public List<GameObject> planets;
     public List<Planet> planetPanels;
 
-    public List<GameObject> stars;
-    public List<GameObject> planets;
-
+    [Header("Telescope")]
     public TMP_Dropdown magDropDown;
-    public TMP_Dropdown apDropDown;
-
+    public TMP_Dropdown flDropDown;
     public List<string> magnifcations;
-    public List<string> apertures;
+    public List<string> focalLengths;
+
+    [Header("Star Placers")]
+    public Transform starTransfromer;
+
+    //right ascension
+    float hour;
+    float minutes;
+    float seconds;
+
+    float decimalFromLongitude;
+
+    //declination
+    float degrees;
+
+    float decimalFromLatitude;
 
     void Start()
     {
         urlHeader = externalDomain;
+
+        starTransfromer = GameObject.Find("StarGOs").transform;
 
         StartCoroutine(GetStars());
         StartCoroutine(GetPlanets());
@@ -107,13 +126,16 @@ public class Web : MonoBehaviour
             starPanel.transform.Find("Constellation").GetComponent<TextMeshProUGUI>().text = "Constellation: " + constell;
             starPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Solar Radius: " + size.ToString();
             starPanel.transform.Find("DistanceFrom").GetComponent<TextMeshProUGUI>().text = "Distance From Sun: " + distanceFrom.ToString() + " ly";
-            starPanel.transform.Find("Color").GetComponent<TextMeshProUGUI>().text = "Color: " + color; 
-            starPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " +  rightAsc;
-            starPanel.transform.Find("Declination").GetComponent<TextMeshProUGUI>().text = "Declination: " + declin;
+            starPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " +  
+                star.rightAscension.hours + "h, " + star.rightAscension.min + "m, " + star.rightAscension.sec + "s";
+            starPanel.transform.Find("Declination").GetComponent<TextMeshProUGUI>().text = "Declination: " + 
+                star.declination.degrees + " °, " + star.declination.minOfArc + "\', " + star.declination.secOfArc + "\"";
             #endregion
             #region Star GameObject
 
             GameObject starGO = Instantiate(Resources.Load("StarGO") as GameObject);
+            starGO.transform.SetParent(starTransfromer, false);
+
             starGO.name = name;
 
             Color c;
@@ -125,9 +147,11 @@ public class Web : MonoBehaviour
             {
                 starGO.GetComponent<MeshRenderer>().material.color = c;
             }
-            
-            starGO.transform.localPosition = new Vector3(star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc);
-            starGO.transform.SetParent(GameObject.Find("StarGOs").transform, false);
+
+            //starGO.transform.localPosition = new Vector3(star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc);
+            StarShoot(starGO, star.rightAscension.hours, star.rightAscension.min, star.rightAscension.sec,
+                star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc,
+                star.size, star.distanceFrom);
 
             #endregion
 
@@ -205,10 +229,13 @@ public class Web : MonoBehaviour
             planetPanel.transform.localScale = new Vector3(1.646302f, 1.646302f, 1.646302f);
 
             planetPanel.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
-            planetPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Radius:" + size.ToString() + " miles";
+            planetPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Radius: " + size.ToString() + " miles";
             planetPanel.transform.Find("DistanceFrom").GetComponent<TextMeshProUGUI>().text = "Distance From Sun: " + distanceFrom.ToString() + " mil miles";
-            planetPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " + rightAsc;
-            planetPanel.transform.Find("Declination").GetComponent<TextMeshProUGUI>().text = "Declination: " + declin;
+            planetPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " +
+                planet.rightAscension.hours + "h, " + planet.rightAscension.min + "m, " + planet.rightAscension.sec + "s";
+            planetPanel.transform.Find("Declination").GetComponent<TextMeshProUGUI>().text = "Declination: " +
+                planet.declination.degrees + " °, " + planet.declination.minOfArc + "\', " + planet.declination.secOfArc + "\"";
+
             #endregion
             # region Planet GameObject
 
@@ -266,17 +293,58 @@ public class Web : MonoBehaviour
         for (int i = 0; i < jsonArray.Count; i++)
         {
             string mag = jsonArray[i].AsObject["Magnification"] + "x";
-            string ap = jsonArray[i].AsObject["Aperture"] + "mm";
+            string focalLength = jsonArray[i].AsObject["FocalLength"] + "mm";
 
+            if(focalLength == "0mm")
+            {
+                focalLength = "Free Look";
+            }
             magnifcations.Add(mag);
-            apertures.Add(ap);
+            focalLengths.Add(focalLength);
         }
 
         magDropDown.ClearOptions();
-        apDropDown.ClearOptions();
+        flDropDown.ClearOptions();
 
         magDropDown.AddOptions(magnifcations);
-        apDropDown.AddOptions(apertures);
+        flDropDown.AddOptions(focalLengths);
     }
-    
+
+    public float Convert()
+    {
+        float temp = hour + minutes / 60 + seconds / 3600;
+
+        temp = temp * 15;
+
+        if (temp > 180)
+        {
+            return temp - 360;
+        }
+        else
+        {
+            return temp;
+        }
+    }
+
+    public void StarShoot(GameObject star, float aH, float aM, float aS, float dD, float dM, float dS, float StarScale, float StarDistance)
+    {
+        hour = aH;
+        minutes = aM;
+        seconds = aS;
+        decimalFromLongitude = Convert();
+
+        hour = dD;
+        minutes = dM;
+        seconds = dS;
+        decimalFromLatitude = Convert();
+
+        starTransfromer.rotation = Quaternion.Euler(decimalFromLongitude, decimalFromLatitude, 0);
+
+        //GameObject star;
+
+        //star = (GameObject)Instantiate(Resources.Load("Prefabs/Star"), t, false);
+        star.transform.position = Vector3.forward * StarDistance;
+        star.transform.localScale = Vector3.one * StarScale;
+
+    }
 }
