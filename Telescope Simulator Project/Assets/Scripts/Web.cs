@@ -22,13 +22,12 @@ public class Web : MonoBehaviour
     public List<Planet> planetPanels;
 
     [Header("Telescope")]
-    public TMP_Dropdown magDropDown;
     public TMP_Dropdown flDropDown;
-    public List<string> magnifcations;
     public List<string> focalLengths;
 
-    [Header("Star Placers")]
-    public Transform starTransfromer;
+    [Header("Placers")]
+    public Transform starTransformer;
+    public Transform planetTransformer;
 
     //right ascension
     float hour;
@@ -46,7 +45,8 @@ public class Web : MonoBehaviour
     {
         urlHeader = externalDomain;
 
-        starTransfromer = GameObject.Find("StarGOs").transform;
+        starTransformer = GameObject.Find("StarGOs").transform;
+        planetTransformer = GameObject.Find("PlanetGOs").transform;
 
         StartCoroutine(GetStars());
         StartCoroutine(GetPlanets());
@@ -134,7 +134,7 @@ public class Web : MonoBehaviour
             #region Star GameObject
 
             GameObject starGO = Instantiate(Resources.Load("StarGO") as GameObject);
-            starGO.transform.SetParent(starTransfromer, false);
+            starGO.transform.SetParent(starTransformer, false);
 
             starGO.name = name;
 
@@ -149,7 +149,7 @@ public class Web : MonoBehaviour
             }
 
             //starGO.transform.localPosition = new Vector3(star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc);
-            StarShoot(starGO, star.rightAscension.hours, star.rightAscension.min, star.rightAscension.sec,
+            StarShoot(true, starGO, star.rightAscension.hours, star.rightAscension.min, star.rightAscension.sec,
                 star.declination.degrees, star.declination.minOfArc, star.declination.secOfArc,
                 star.size, star.distanceFrom);
 
@@ -241,9 +241,14 @@ public class Web : MonoBehaviour
 
             GameObject planetGO = Instantiate(Resources.Load(name) as GameObject);
             planetGO.AddComponent<PlanetGO>();
+            planetGO.transform.SetParent(planetTransformer, false);
             planetGO.name = name;
-            planetGO.transform.localPosition = new Vector3(planet.declination.degrees, planet.declination.minOfArc, planet.declination.secOfArc);
-            planetGO.transform.SetParent(GameObject.Find("PlanetGOs").transform, false);
+
+            StarShoot(false, planetGO, planet.rightAscension.hours, planet.rightAscension.min, planet.rightAscension.sec,
+                planet.declination.degrees, planet.declination.minOfArc, planet.declination.secOfArc,
+                planet.size, planet.distanceFrom);
+
+            
 
             #endregion
 
@@ -292,21 +297,15 @@ public class Web : MonoBehaviour
 
         for (int i = 0; i < jsonArray.Count; i++)
         {
-            string mag = jsonArray[i].AsObject["Magnification"] + "x";
             string focalLength = jsonArray[i].AsObject["FocalLength"] + "mm";
 
             if(focalLength == "0mm")
             {
                 focalLength = "Free Look";
             }
-            magnifcations.Add(mag);
             focalLengths.Add(focalLength);
         }
-
-        magDropDown.ClearOptions();
         flDropDown.ClearOptions();
-
-        magDropDown.AddOptions(magnifcations);
         flDropDown.AddOptions(focalLengths);
     }
 
@@ -326,7 +325,7 @@ public class Web : MonoBehaviour
         }
     }
 
-    public void StarShoot(GameObject star, float aH, float aM, float aS, float dD, float dM, float dS, float StarScale, float StarDistance)
+    public void StarShoot(bool isStar, GameObject star, float aH, float aM, float aS, float dD, float dM, float dS, float StarScale, float StarDistance)
     {
         hour = aH;
         minutes = aM;
@@ -338,7 +337,10 @@ public class Web : MonoBehaviour
         seconds = dS;
         decimalFromLatitude = Convert();
 
-        starTransfromer.rotation = Quaternion.Euler(decimalFromLongitude, decimalFromLatitude, 0);
+        if(isStar)
+            starTransformer.rotation = Quaternion.Euler(decimalFromLongitude, decimalFromLatitude, 0);
+        else
+            planetTransformer.rotation = Quaternion.Euler(decimalFromLongitude, decimalFromLatitude, 0);
 
         //GameObject star;
 

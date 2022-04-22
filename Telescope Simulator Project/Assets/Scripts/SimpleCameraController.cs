@@ -50,7 +50,11 @@ namespace UnityTemplateProjects
             public void UpdateTransform(Transform t)
             {
                 t.eulerAngles = new Vector3(pitch, yaw, roll);
-                t.position = new Vector3(x, y, z);
+                if(!(float.IsNaN(x) && float.IsNaN(y) && float.IsNaN(z)))
+                {
+                    t.position = new Vector3(x, y, z);
+                }
+                
             }
         }
         

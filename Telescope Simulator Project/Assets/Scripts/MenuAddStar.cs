@@ -43,6 +43,9 @@ public class MenuAddStar : MonoBehaviour
         string rightAscension = rightAscHours_IF.text +  " " + rightAscMin_IF.text + " " + rightAscSec_IF.text;
         string declination = declinDeg_IF.text + " " + declinMin_IF.text + " " + declinSec_IF.text;
 
+        //convert from solar radius to light year times 100,000 to have an enjoyable scale
+        float size = float.Parse(size_IF.text) * 0.0073567f;
+
         form.AddField("Name", name_IF.text);
         form.AddField("Size", size_IF.text);
         form.AddField("DistanceFrom", distanceFrom_IF.text);

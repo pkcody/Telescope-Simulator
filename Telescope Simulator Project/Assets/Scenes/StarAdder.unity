@@ -4074,7 +4074,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 131.9402, y: 33.814}
+  m_SizeDelta: {x: 159.2167, y: 33.814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1593270725543086194
 CanvasRenderer:
@@ -4955,7 +4955,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 131.9402, y: 33.814}
+  m_SizeDelta: {x: 214.8181, y: 33.814}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1593270726298487254
 CanvasRenderer:
@@ -6720,7 +6720,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Distance From
+  m_text: Distance From (light years)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e8d01759ae017843a13a71168ff5993, type: 2}
   m_sharedMaterial: {fileID: -6726129157635180140, guid: 1e8d01759ae017843a13a71168ff5993, type: 2}
@@ -7298,7 +7298,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Size
+  m_text: Size (Solar Radius)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1e8d01759ae017843a13a71168ff5993, type: 2}
   m_sharedMaterial: {fileID: -6726129157635180140, guid: 1e8d01759ae017843a13a71168ff5993, type: 2}

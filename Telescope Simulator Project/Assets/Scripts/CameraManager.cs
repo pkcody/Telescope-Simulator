@@ -6,9 +6,7 @@ using TMPro;
 public class CameraManager : MonoBehaviour
 {
     public Camera mc;
-
-    public List<float> focalLengths;
-    public bool isFreeLook = false;
+    public bool isFreeLook = true;
 
     void Start()
     {
@@ -53,7 +51,7 @@ public class CameraManager : MonoBehaviour
         {
             if (!(Input.mouseScrollDelta == Vector2.zero))
             {
-                mc.fieldOfView += Input.mouseScrollDelta.y * -1;
+                mc.fieldOfView += Input.mouseScrollDelta.y * -1 / 10;
             }
         }
         
