@@ -47,7 +47,7 @@ public class MenuAddStar : MonoBehaviour
         float size = float.Parse(size_IF.text) * 0.0073567f;
 
         form.AddField("Name", name_IF.text);
-        form.AddField("Size", size_IF.text);
+        form.AddField("Size", size.ToString());
         form.AddField("DistanceFrom", distanceFrom_IF.text);
         form.AddField("Color", color_IF.text);
         form.AddField("RightAscension", rightAscension);

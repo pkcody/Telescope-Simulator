@@ -102,6 +102,7 @@ public class Web : MonoBehaviour
 
             starPanel.name = name + "Panel";
 
+            float radius = size * 13593003 / 100000;
             star.name = name;
             star.size = size;
             star.distanceFrom = distanceFrom;
@@ -124,7 +125,7 @@ public class Web : MonoBehaviour
 
             starPanel.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
             starPanel.transform.Find("Constellation").GetComponent<TextMeshProUGUI>().text = "Constellation: " + constell;
-            starPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Solar Radius: " + size.ToString();
+            starPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Solar Radius: " + radius.ToString("F2");
             starPanel.transform.Find("DistanceFrom").GetComponent<TextMeshProUGUI>().text = "Distance From Sun: " + distanceFrom.ToString() + " ly";
             starPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " +  
                 star.rightAscension.hours + "h, " + star.rightAscension.min + "m, " + star.rightAscension.sec + "s";
@@ -210,10 +211,13 @@ public class Web : MonoBehaviour
             Planet planet = planetPanel.AddComponent<Planet>();
 
             planetPanel.name = name + "Panel";
-
+            
             planet.name = name;
             planet.size = size;
             planet.distanceFrom = distanceFrom;
+
+            //Planet size from lightyear to miles
+            int radius = (int)(size * 587860);
 
             string[] rA = rightAsc.Split(' ');
             planet.rightAscension.hours = float.Parse(rA[0]);
@@ -229,7 +233,7 @@ public class Web : MonoBehaviour
             planetPanel.transform.localScale = new Vector3(1.646302f, 1.646302f, 1.646302f);
 
             planetPanel.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = name;
-            planetPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Radius: " + size.ToString() + " miles";
+            planetPanel.transform.Find("Size").GetComponent<TextMeshProUGUI>().text = "Radius: " + radius + " miles";
             planetPanel.transform.Find("DistanceFrom").GetComponent<TextMeshProUGUI>().text = "Distance From Sun: " + distanceFrom.ToString() + " mil miles";
             planetPanel.transform.Find("RightAscension").GetComponent<TextMeshProUGUI>().text = "Right Ascension: " +
                 planet.rightAscension.hours + "h, " + planet.rightAscension.min + "m, " + planet.rightAscension.sec + "s";
