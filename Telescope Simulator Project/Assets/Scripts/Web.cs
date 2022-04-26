@@ -103,6 +103,7 @@ public class Web : MonoBehaviour
             starPanel.name = name + "Panel";
 
             float radius = size * 13593003 / 100000;
+
             star.name = name;
             star.size = size;
             star.distanceFrom = distanceFrom;
